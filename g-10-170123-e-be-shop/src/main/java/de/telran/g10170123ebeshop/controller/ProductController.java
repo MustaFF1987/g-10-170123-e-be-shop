@@ -40,7 +40,7 @@ public class ProductController {
                 return ResponseEntity.ok(totalCount);
         }
 
-        // 2.1. Получение списка всех товаров (ввиде json)
+        // 3. Получение списка всех товаров (в виде json)
         @GetMapping("/totalCountList")
         Iterable<Product> getAllProductList() {
                 return commonProductService.getAll();
@@ -48,7 +48,7 @@ public class ProductController {
 
 
 
-        // 3. Получение товара по Id
+        // 4. Получение товара по Id
         @GetMapping("/getProductById/{id}")
         public ResponseEntity<Product> getProductById(@PathVariable int id) {
                 Product product = commonProductService.getById(id);
@@ -60,14 +60,14 @@ public class ProductController {
         }
 
 
-        // 4. Удаление товара по id
+        // 5. Удаление товара по id
         @DeleteMapping("/deleteById/{id}")
         void delete(@PathVariable int id)
         {
                 commonProductService.deleteById(id);
         }
 
-        // 5. Получить суммарную стоимость товаров.
+        // 6. Получить суммарную стоимость товаров.
         @GetMapping("/totalPrice")
         public ResponseEntity<Double> getTotalProductPrice() {
                 double totalProductPrice = commonProductService.getTotalPrice();
@@ -75,7 +75,7 @@ public class ProductController {
         }
 
 
-        // 6. Получить среднюю стоимость товаров.
+        // 7. Получить среднюю стоимость товаров.
         @GetMapping("/averagePrice")
         public ResponseEntity<Double> getAverageProductPrice() {
                 double averageProductPrice = commonProductService.getAveragePrice();
@@ -83,7 +83,7 @@ public class ProductController {
         }
 
 
-        // 7. Удалить товар по наименованию.
+        // 8. Удалить товар по наименованию.
         @DeleteMapping("/deleteByName/{productName}")
         public ResponseEntity<Void> deleteProductByName(@PathVariable String productName) {
                 commonProductService.deleteByName(productName);
