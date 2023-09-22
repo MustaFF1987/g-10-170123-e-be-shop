@@ -102,7 +102,6 @@ public class CommonCustomerRepository implements CustomerRepository {
 
     @Override
     public void deleteProductById(int productId) {
-
     }
 
     @Override

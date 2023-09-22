@@ -30,7 +30,7 @@ public class CommonDatabase implements Database {
         products.add(new CommonProduct(4, "Cherry", 250));
         products.add(new CommonProduct(5, "Peach", 220));
 
-        currentCustomerId = 3;
+        currentCustomerId = 4;
         currentProductId = 5;
     }
 

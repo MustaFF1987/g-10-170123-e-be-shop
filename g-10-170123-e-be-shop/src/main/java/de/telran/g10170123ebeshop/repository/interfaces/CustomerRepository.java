@@ -1,7 +1,6 @@
 package de.telran.g10170123ebeshop.repository.interfaces;
 
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
-import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 
 import java.util.List;
 
