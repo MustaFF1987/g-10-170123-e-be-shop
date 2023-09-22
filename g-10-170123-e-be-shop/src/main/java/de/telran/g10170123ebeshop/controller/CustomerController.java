@@ -69,8 +69,6 @@ public class CustomerController {
     }
 
 
-
-
     // Получить общее количество покупателей со всеми данными (2ой вариант))
     @GetMapping("/getAll")
     Iterable<Customer> getAllCustomers() {
@@ -85,9 +83,11 @@ public class CustomerController {
     }
 
     //  Получить среднюю стоимость товара в корзине покупателя по его идентификатору
-    //  @GetMapping("/{customerId}/cart/average")
-    //  public ResponseEntity<Double> getAverageCartItemPrice
-    //  (@PathVariable double id)
+    @GetMapping("/{customerId}/cart/average")
+    public ResponseEntity<Double> getAverageCartItemPrice(@PathVariable int customerId) {
+        double averageCartItemPrice = customerRepository.getAveragePrice(customerId);
+        return ResponseEntity.ok(averageCartItemPrice);
+    }
 
 
 

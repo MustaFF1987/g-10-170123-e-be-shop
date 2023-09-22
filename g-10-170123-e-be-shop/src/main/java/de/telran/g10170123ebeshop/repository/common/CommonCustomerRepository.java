@@ -1,6 +1,7 @@
 package de.telran.g10170123ebeshop.repository.common;
 
 import de.telran.g10170123ebeshop.domain.database.interfaces.Database;
+import de.telran.g10170123ebeshop.domain.entity.interfaces.Cart;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 import de.telran.g10170123ebeshop.repository.interfaces.CustomerRepository;
@@ -102,4 +103,32 @@ public class CommonCustomerRepository implements CustomerRepository {
         getCustomerById(customerId).getShoppingCart().deleteAll();
     }
 
+
+    public double getCartTotalByCustomerId(int customerId) {
+        Customer customer = getCustomerById(customerId);
+        double cartTotal = customer.getShoppingCart().calculateTotal();
+        return cartTotal;
+    }
+
+    @Override
+    public double getAveragePrice(int customerId) {
+        Customer customer = getCustomerById(customerId);
+
+        if (customer != null) {
+            Cart shoppingCart = customer.getShoppingCart();
+            List<Product> cartItems = shoppingCart.getProducts();
+
+            if (!cartItems.isEmpty()) {
+                double totalCartItemPrice = cartItems.stream()
+                        .mapToDouble(Product::getPrice)
+                        .sum();
+
+                return totalCartItemPrice / cartItems.size();
+            } else {
+                return 0.0; // Возвращаем 0, если корзина пуста
+            }
+        } else {
+            throw new IllegalArgumentException("Customer not found"); // если покупатель не найден
+        }
+    }
 }

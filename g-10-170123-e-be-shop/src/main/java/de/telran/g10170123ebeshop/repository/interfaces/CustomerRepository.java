@@ -25,11 +25,7 @@ public interface CustomerRepository {
 
     void deleteAllProductsFromCart(int customerId);
 
-   default double getCartTotalByCustomerId(int customerId) {
-        Customer customer = getCustomerById(customerId);
-        double cartTotal = customer.getShoppingCart().calculateTotal();
-        return cartTotal;
+    double getCartTotalByCustomerId(int customerId);
 
-
-    }
+    double getAveragePrice(int customerId);
 }
