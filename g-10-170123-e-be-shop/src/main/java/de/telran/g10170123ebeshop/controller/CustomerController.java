@@ -56,9 +56,9 @@ public class CustomerController {
     // 2. Добавления пользователя
     @PostMapping ("/addUser")
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer addCustomer(@RequestBody Customer customer) {
-        commonCustomerService.add(customer);
-        return customer;
+    public CommonCustomer addCustomer(@RequestBody CommonCustomer commonCustomer) {
+        commonCustomerService.add(commonCustomer);
+        return commonCustomer;
 
     }
 

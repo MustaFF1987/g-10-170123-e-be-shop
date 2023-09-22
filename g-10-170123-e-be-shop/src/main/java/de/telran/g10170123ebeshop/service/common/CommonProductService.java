@@ -53,8 +53,11 @@ import java.util.List;
         return getTotalPrice() / count;
     }
 
-    @Override
-    public void deleteByName(String name) {
-        getAll().removeIf(x -> x.getName().equals(name));
-    }
+        @Override
+        public void deleteByName(String name) {
+            Product productToDelete = getAll().stream().filter(x -> name.equals(x.getName())).findFirst().orElse(null);
+            if (productToDelete != null) {
+                deleteById(productToDelete.getId());
+            }
+        }
 }
