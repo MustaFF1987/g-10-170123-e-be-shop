@@ -40,6 +40,13 @@ public class ProductController {
                 return ResponseEntity.ok(totalCount);
         }
 
+        // 2.1. Получение списка всех товаров
+        @GetMapping("/totalCountList")
+        Iterable<Product> getAllProductList() {
+                return commonProductService.getAll();
+        }
+
+
 
         // 3. Получение товара по Id
         @GetMapping("/getProductById/{id}")
