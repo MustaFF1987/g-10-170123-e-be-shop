@@ -33,14 +33,14 @@ public class ProductController {
 
         }
 
-        // 2. Получение списка всех товаров
+        // 2. Получение списка всех товаров (числовое)
         @GetMapping("/totalCount")
         public ResponseEntity<Long> getTotalProductCount() {
                 long totalCount = commonProductService.getCount();
                 return ResponseEntity.ok(totalCount);
         }
 
-        // 2.1. Получение списка всех товаров
+        // 2.1. Получение списка всех товаров (ввиде json)
         @GetMapping("/totalCountList")
         Iterable<Product> getAllProductList() {
                 return commonProductService.getAll();
