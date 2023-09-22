@@ -28,7 +28,7 @@ public class CustomerController {
     private CustomerRepository customerRepository;
 
 
-    /* Получения, удаления и добавления пользователя
+    /* Задачи Получения, удаления и добавления пользователя
     Получить стоимость корзины покупателя по его идентификатору - .
     Получить среднюю стоимость товара в корзине покупателя по его идентификатору.
     Удалить покупателя по имени.
@@ -37,7 +37,7 @@ public class CustomerController {
     Очистить корзину покупателя по его идентификатору.*/
 
 
- //   Получить общее количество покупателей (1ый вариант))
+ //   1.1 Получить общее количество покупателей (1ый вариант))
 //    @GetMapping("/getAll")
 //    public ResponseEntity<Long> getAllCustomers() {
 //        long totalCustomers = customerRepository.getAll().stream().count();
@@ -45,14 +45,14 @@ public class CustomerController {
 //    }
 
 
-    // Получить общее количество покупателей со всеми данными (2ой вариант))
+    // 1.2 Получить общее количество покупателей со всеми данными (2ой вариант))
     @GetMapping("/getAll")
     Iterable<Customer> getAllCustomers() {
         return customerRepository.getAll();
     }
 
 
-    // Добавления пользователя
+    // 2. Добавления пользователя
     @PostMapping ("/addUser")
     @ResponseStatus(HttpStatus.CREATED)
     public Customer addCustomer(@RequestBody Customer customer) {
@@ -61,28 +61,28 @@ public class CustomerController {
 
     }
 
-    // Получения пользователя по id
+    // 3. Получения пользователя по id
     @GetMapping("/getUserById/{id}")
     public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable int id) {
         Customer customer = customerRepository.getCustomerById(id);
         return ResponseEntity.notFound().build();
         }
 
-    // Удаление пользователя по id
+    // 4. Удаление пользователя по id
        @DeleteMapping("/deleteById/{id}")
        void delete(@PathVariable int id)
       {
         customerRepository.deleteCustomerById(id);
       }
 
-    // Получить стоимость корзины покупателя по его идентификатору.
+    //  5. Получить стоимость корзины покупателя по его идентификатору.
         @GetMapping("/{customerId}/cart/total")
         public ResponseEntity<Double> getCartTotalByCustomerId(@PathVariable int customerId) {
         double cartTotal = customerRepository.getCartTotalByCustomerId(customerId);
         return ResponseEntity.ok(cartTotal);
       }
 
-    //  Получить среднюю стоимость товара в корзине покупателя по его идентификатору
+    //  6. Получить среднюю стоимость товара в корзине покупателя по его идентификатору
     @GetMapping("/{customerId}/cart/average")
     public ResponseEntity<Double> getAverageCartItemPrice(@PathVariable int customerId) {
         double averageCartItemPrice = customerRepository.getAveragePrice(customerId);
@@ -90,12 +90,21 @@ public class CustomerController {
       }
 
 
-    // Очистить корзину покупателя по его идентификатору
+    // 7. Очистить корзину покупателя по его идентификатору
     @DeleteMapping("/{customerId}/cart/clear")
     public ResponseEntity<Void> clearCart(@PathVariable Long customerId) {
         customerRepository.deleteAllProductsFromCart(customerId.intValue());
         return ResponseEntity.noContent().build();
 
+    }
+
+    // 8. Удалить товар из корзины покупателя по их идентификаторам
+    @DeleteMapping("/{customerId}/cart/deleteProduct/{productId}")
+    public ResponseEntity<Void> deleteProductFromCart(
+            @PathVariable int customerId,
+            @PathVariable int productId) {
+        customerRepository.deleteFromCartById(customerId, productId);
+        return ResponseEntity.noContent().build();
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -7,7 +7,6 @@ import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 import de.telran.g10170123ebeshop.repository.interfaces.CustomerRepository;
 import de.telran.g10170123ebeshop.repository.interfaces.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -101,6 +100,25 @@ public class CommonCustomerRepository implements CustomerRepository {
         getCustomerById(customerId).getShoppingCart().deleteAll();
     }
 
+    @Override
+    public void deleteProductById(int productId) {
+
+    }
+
+    @Override
+    public void deleteProductById(int customerId, int productId){
+        Customer customer = getCustomerById(customerId);
+
+        if (customer != null) {
+            Cart shoppingCart = customer.getShoppingCart();
+            List<Product> cartItems = shoppingCart.getProducts();
+
+            // Удаление товара из корзины по его идентификатору
+            cartItems.removeIf(product -> product.getId() == productId);
+        } else {
+            throw new IllegalArgumentException("Customer not found"); // если покупатель не найден
+        }
+    }
 
     public double getCartTotalByCustomerId(int customerId) {
         Customer customer = getCustomerById(customerId);

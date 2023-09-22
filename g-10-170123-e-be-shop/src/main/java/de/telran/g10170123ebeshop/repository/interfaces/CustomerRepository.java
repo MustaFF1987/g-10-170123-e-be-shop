@@ -25,6 +25,10 @@ public interface CustomerRepository {
 
     void deleteAllProductsFromCart(int customerId);
 
+    void deleteProductById(int productId);
+
+    void deleteProductById(int customerId, int productId);
+
     double getCartTotalByCustomerId(int customerId);
 
     double getAveragePrice(int customerId);
