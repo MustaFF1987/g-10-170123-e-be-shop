@@ -45,6 +45,13 @@ public class CustomerController {
 //    }
 
 
+    // Получить общее количество покупателей со всеми данными (2ой вариант))
+    @GetMapping("/getAll")
+    Iterable<Customer> getAllCustomers() {
+        return customerRepository.getAll();
+    }
+
+
     // Добавления пользователя
     @PostMapping ("/addUser")
     @ResponseStatus(HttpStatus.CREATED)
@@ -54,7 +61,7 @@ public class CustomerController {
 
     }
 
- //    Получения пользователя по id
+    // Получения пользователя по id
     @GetMapping("/getUserById/{id}")
     public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable int id) {
         Customer customer = customerRepository.getCustomerById(id);
@@ -62,33 +69,25 @@ public class CustomerController {
         }
 
     // Удаление пользователя по id
-    @DeleteMapping("/deleteById/{id}")
-    void delete(@PathVariable int id)
-    {
+       @DeleteMapping("/deleteById/{id}")
+       void delete(@PathVariable int id)
+      {
         customerRepository.deleteCustomerById(id);
-    }
-
-
-    // Получить общее количество покупателей со всеми данными (2ой вариант))
-    @GetMapping("/getAll")
-    Iterable<Customer> getAllCustomers() {
-        return customerRepository.getAll();
-    }
+      }
 
     // Получить стоимость корзины покупателя по его идентификатору.
         @GetMapping("/{customerId}/cart/total")
         public ResponseEntity<Double> getCartTotalByCustomerId(@PathVariable int customerId) {
         double cartTotal = customerRepository.getCartTotalByCustomerId(customerId);
         return ResponseEntity.ok(cartTotal);
-    }
+      }
 
     //  Получить среднюю стоимость товара в корзине покупателя по его идентификатору
     @GetMapping("/{customerId}/cart/average")
     public ResponseEntity<Double> getAverageCartItemPrice(@PathVariable int customerId) {
         double averageCartItemPrice = customerRepository.getAveragePrice(customerId);
         return ResponseEntity.ok(averageCartItemPrice);
-    }
-
+      }
 
 
     // Очистить корзину покупателя по его идентификатору
@@ -96,7 +95,6 @@ public class CustomerController {
     public ResponseEntity<Void> clearCart(@PathVariable Long customerId) {
         customerRepository.deleteAllProductsFromCart(customerId.intValue());
         return ResponseEntity.noContent().build();
-
 
     }
 
@@ -116,5 +114,4 @@ public class CustomerController {
         );
         return errors;
     }
-
 }

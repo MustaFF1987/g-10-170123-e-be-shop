@@ -60,8 +60,6 @@ public class CommonCustomerRepository implements CustomerRepository {
     }
 
 
-
-
     @Override
     public void deleteCustomerById(int id) {
         try{
