@@ -30,7 +30,7 @@ public class CustomerController {
     private CommonCustomerService commonCustomerService;
 
 
-    // 1. Получить общее количество покупателей (1ый вариант))
+    // 1. Получить общее количество покупателей
     @GetMapping("/getCount")
     public ResponseEntity<Long> getAllCustomersCount() {
         long totalCustomers = commonCustomerService.getCount();
