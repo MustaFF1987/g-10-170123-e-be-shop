@@ -13,12 +13,10 @@ import java.util.List;
 
 public class CommonCustomerRepository implements CustomerRepository {
 
-
     @Autowired
     private Database database;
     @Autowired
     private ProductRepository productRepository;
-
 
     @Override
     public List<Customer> getAll() {
@@ -83,5 +81,4 @@ public class CommonCustomerRepository implements CustomerRepository {
             throw new IllegalArgumentException("Customer not found"); // если покупатель не найден
         }
     }
-
 }
