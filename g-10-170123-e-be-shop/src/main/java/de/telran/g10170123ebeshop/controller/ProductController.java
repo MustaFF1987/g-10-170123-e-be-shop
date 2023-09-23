@@ -12,17 +12,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/products")
 public class ProductController {
 
-
         @Autowired
         private CommonProductService commonProductService;
-
-    /*
-	Функционал кроме получения, удаления * и добавления *:
-	Получить общее количество товаров.
-	Получить суммарную стоимость товаров *.
-	Получить среднюю стоимость товаров *.
-	Удалить товар по наименованию *.*/
-
 
         // 1. Добавления товара
         @PostMapping("/addProduct")
@@ -54,7 +45,7 @@ public class ProductController {
                 } else {
                         return ResponseEntity.notFound().build(); // Возвращаем статус 404, если товар не найден
                 }
-        }
+            }
 
         // 5. Удаление товара по id
         @DeleteMapping("/deleteById/{id}")
@@ -82,5 +73,5 @@ public class ProductController {
         public ResponseEntity<Void> deleteProductByName(@PathVariable String productName) {
                 commonProductService.deleteByName(productName);
                 return ResponseEntity.noContent().build();
-       }
-}
+        }
+     }
