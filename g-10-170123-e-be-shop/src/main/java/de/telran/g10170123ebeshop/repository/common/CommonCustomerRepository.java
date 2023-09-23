@@ -39,40 +39,18 @@ public class CommonCustomerRepository implements CustomerRepository {
     }
 
     @Override
-    public Customer getCustomerByName(String name) {
-        try {
-            return (Customer) database.select("Select customer where name = " + name);
-        } catch (SQLException e){
-            throw new RuntimeException();
-        }
-    }
-
-
-    @Override
     public void addCustomer(String name) {
         try {
             database.execute("Add new customer name = " + name);
         } catch (SQLException e){
             throw new RuntimeException();
         }
-
     }
-
 
     @Override
     public void deleteCustomerById(int id) {
         try{
             database.execute("Delete customer where id = " + id);
-        } catch (SQLException e){
-            throw new RuntimeException();
-        }
-
-    }
-
-    @Override
-    public void deleteCustomerByName(String name) {
-        try{
-            database.execute("Delete customer where name = " + name);
         } catch (SQLException e){
             throw new RuntimeException();
         }
@@ -83,25 +61,12 @@ public class CommonCustomerRepository implements CustomerRepository {
 
           Product product = productRepository.getProductById(productId);
           getCustomerById(customerId).getShoppingCart().addProduct(product);
-
-
-    }
-
-    @Override
-    public void deleteFromCartById(int customerId, int productId) {
-
-        getCustomerById(customerId).getShoppingCart().deleteProduct(productId);
-
     }
 
     @Override
     public void deleteAllProductsFromCart(int customerId) {
 
         getCustomerById(customerId).getShoppingCart().deleteAll();
-    }
-
-    @Override
-    public void deleteProductById(int productId) {
     }
 
     @Override
@@ -119,31 +84,4 @@ public class CommonCustomerRepository implements CustomerRepository {
         }
     }
 
-    public double getCartTotalByCustomerId(int customerId) {
-        Customer customer = getCustomerById(customerId);
-        double cartTotal = customer.getShoppingCart().calculateTotal();
-        return cartTotal;
-    }
-
-    @Override
-    public double getAveragePrice(int customerId) {
-        Customer customer = getCustomerById(customerId);
-
-        if (customer != null) {
-            Cart shoppingCart = customer.getShoppingCart();
-            List<Product> cartItems = shoppingCart.getProducts();
-
-            if (!cartItems.isEmpty()) {
-                double totalCartItemPrice = cartItems.stream()
-                        .mapToDouble(Product::getPrice)
-                        .sum();
-
-                return totalCartItemPrice / cartItems.size();
-            } else {
-                return 0.0; // Возвращаем 0, если корзина пуста
-            }
-        } else {
-            throw new IllegalArgumentException("Customer not found"); // если покупатель не найден
-        }
-    }
 }
