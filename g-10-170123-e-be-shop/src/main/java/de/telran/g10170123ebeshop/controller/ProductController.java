@@ -1,5 +1,6 @@
 package de.telran.g10170123ebeshop.controller;
 
+import de.telran.g10170123ebeshop.domain.entity.common.CommonProduct;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 import de.telran.g10170123ebeshop.service.common.CommonProductService;
@@ -18,10 +19,9 @@ public class ProductController {
         // 1. Добавления товара
         @PostMapping("/addProduct")
         @ResponseStatus(HttpStatus.CREATED)
-        public Product addProduct(@RequestBody Product product) {
-                commonProductService.addProduct(product);
-                return product;
-        }
+        public Product addProduct(@RequestBody CommonProduct commonProduct) {
+                commonProductService.addProduct(commonProduct);
+                return commonProduct;        }
 
         // 2. Получение списка всех товаров (числовое)
         @GetMapping("/totalCount")
