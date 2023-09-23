@@ -2,6 +2,7 @@ package de.telran.g10170123ebeshop.controller;
 
 
 import de.telran.g10170123ebeshop.domain.entity.common.CommonCustomer;
+import de.telran.g10170123ebeshop.domain.entity.interfaces.Cart;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 import de.telran.g10170123ebeshop.repository.common.CommonCustomerRepository;
@@ -29,29 +30,12 @@ public class CustomerController {
     private CommonCustomerService commonCustomerService;
 
 
-    /* Задачи Получения, удаления и добавления пользователя
-    Получить стоимость корзины покупателя по его идентификатору - .
-    Получить среднюю стоимость товара в корзине покупателя по его идентификатору.
-    Удалить покупателя по имени.
-    Добавить в корзину покупателя товар по их идентификаторам.
-    Удалить товар из корзины покупателя по их идентификаторам.
-    Очистить корзину покупателя по его идентификатору.*/
-
-
- //   1.1 Получить общее количество покупателей (1ый вариант))
-//    @GetMapping("/getAll")
-//    public ResponseEntity<Long> getAllCustomers() {
-//        long totalCustomers = customerRepository.getAll().stream().count();
-//        return ResponseEntity.ok(totalCustomers);
-//    }
-
-
-    // 1.2 Получить общее количество покупателей со всеми данными (2ой вариант))
-    @GetMapping("/getAll")
-    Iterable<Customer> getAllCustomers() {
-        return commonCustomerService.getAll();
+    // 1. Получить общее количество покупателей (1ый вариант))
+    @GetMapping("/getCount")
+    public ResponseEntity<Long> getAllCustomersCount() {
+        long totalCustomers = commonCustomerService.getCount();
+        return ResponseEntity.ok(totalCustomers);
     }
-
 
     // 2. Добавления пользователя
     @PostMapping ("/addUser")
@@ -59,7 +43,6 @@ public class CustomerController {
     public CommonCustomer addCustomer(@RequestBody CommonCustomer commonCustomer) {
         commonCustomerService.add(commonCustomer);
         return commonCustomer;
-
     }
 
     // 3. Получения пользователя по id
@@ -94,13 +77,11 @@ public class CustomerController {
         return ResponseEntity.ok(averageCartItemPrice);
       }
 
-
     // 7. Очистить корзину покупателя по его идентификатору
     @DeleteMapping("/{customerId}/cart/clear")
     public ResponseEntity<Void> clearCart(@PathVariable Long customerId) {
-        commonCustomerService.deleteById(customerId.intValue());
+        commonCustomerService.clearCart(customerId.intValue());
         return ResponseEntity.noContent().build();
-
     }
 
     // 8. Удалить товар из корзины покупателя по идентификатору
@@ -110,6 +91,36 @@ public class CustomerController {
             @PathVariable int productId) {
         commonCustomerService.deleteFromCart(customerId, productId);
         return ResponseEntity.noContent().build();
+    }
+
+    // 9. Удаления пользователя по имени
+    @DeleteMapping("/deleteByName/{customerName}")
+    public ResponseEntity<Void> deleteCustomerByName(@PathVariable String customerName) {
+
+        commonCustomerService.deleteByName(customerName);
+
+        // Возвращаем успешный ответ
+        return ResponseEntity.ok().build();
+    }
+
+    // 10. Получить общее количество покупателей из БД
+    @GetMapping("/getAll")
+    Iterable<Customer> getAllCustomers() {
+        return commonCustomerService.getAll();
+    }
+
+    // 11. добавления товара в корзину пользователя
+    @PostMapping("/addToCart/{userId}/{productId}")
+    public ResponseEntity<Void> addToCart(
+            @PathVariable int userId,
+            @PathVariable int productId) {
+
+        // Вызываем сервис commonCustomerService м метод addToCartById с аргументами
+        // для добавления товара в корзину пользователя
+        commonCustomerService.addToCartById(userId, productId);
+
+        // Возвращаем успешный ответ
+        return ResponseEntity.ok().build();
     }
 
 

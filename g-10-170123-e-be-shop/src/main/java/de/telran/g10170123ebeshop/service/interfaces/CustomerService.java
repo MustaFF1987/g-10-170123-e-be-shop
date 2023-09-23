@@ -27,5 +27,6 @@ import java.util.List;
         void deleteFromCart(int customerId, int productId);
 
         void clearCart(int customerId);
+
     }
 
