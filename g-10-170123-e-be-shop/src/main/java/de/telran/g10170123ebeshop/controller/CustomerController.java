@@ -96,9 +96,7 @@ public class CustomerController {
     // 9. Удаления пользователя по имени
     @DeleteMapping("/deleteByName/{customerName}")
     public ResponseEntity<Void> deleteCustomerByName(@PathVariable String customerName) {
-
         commonCustomerService.deleteByName(customerName);
-
         // Возвращаем успешный ответ
         return ResponseEntity.ok().build();
        }
