@@ -30,7 +30,6 @@ public class ProductController {
         public Product addProduct(@RequestBody Product product) {
                 commonProductService.addProduct(product);
                 return product;
-
         }
 
         // 2. Получение списка всех товаров (числовое)
@@ -46,8 +45,6 @@ public class ProductController {
                 return commonProductService.getAll();
         }
 
-
-
         // 4. Получение товара по Id
         @GetMapping("/getProductById/{id}")
         public ResponseEntity<Product> getProductById(@PathVariable int id) {
@@ -58,7 +55,6 @@ public class ProductController {
                         return ResponseEntity.notFound().build(); // Возвращаем статус 404, если товар не найден
                 }
         }
-
 
         // 5. Удаление товара по id
         @DeleteMapping("/deleteById/{id}")
@@ -74,7 +70,6 @@ public class ProductController {
                 return ResponseEntity.ok(totalProductPrice);
         }
 
-
         // 7. Получить среднюю стоимость товаров.
         @GetMapping("/averagePrice")
         public ResponseEntity<Double> getAverageProductPrice() {
@@ -82,14 +77,10 @@ public class ProductController {
                 return ResponseEntity.ok(averageProductPrice);
         }
 
-
         // 8. Удалить товар по наименованию.
         @DeleteMapping("/deleteByName/{productName}")
         public ResponseEntity<Void> deleteProductByName(@PathVariable String productName) {
                 commonProductService.deleteByName(productName);
                 return ResponseEntity.noContent().build();
        }
-
-
-
 }

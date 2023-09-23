@@ -35,7 +35,7 @@ public class CustomerController {
     public ResponseEntity<Long> getAllCustomersCount() {
         long totalCustomers = commonCustomerService.getCount();
         return ResponseEntity.ok(totalCustomers);
-    }
+      }
 
     // 2. Добавления пользователя
     @PostMapping ("/addUser")
@@ -43,7 +43,7 @@ public class CustomerController {
     public CommonCustomer addCustomer(@RequestBody CommonCustomer commonCustomer) {
         commonCustomerService.add(commonCustomer);
         return commonCustomer;
-    }
+      }
 
     // 3. Получения пользователя по id
     @GetMapping("/getUserById/{id}")
@@ -54,7 +54,7 @@ public class CustomerController {
         } else {
             return ResponseEntity.notFound().build(); // Возвращаем статус 404, если покупатель не найден
         }
-    }
+      }
 
     // 4. Удаление пользователя по id
        @DeleteMapping("/deleteById/{id}")
@@ -82,7 +82,7 @@ public class CustomerController {
     public ResponseEntity<Void> clearCart(@PathVariable Long customerId) {
         commonCustomerService.clearCart(customerId.intValue());
         return ResponseEntity.noContent().build();
-    }
+      }
 
     // 8. Удалить товар из корзины покупателя по идентификатору
     @DeleteMapping("/{customerId}/cart/deleteProduct/{productId}")
@@ -91,7 +91,7 @@ public class CustomerController {
             @PathVariable int productId) {
         commonCustomerService.deleteFromCart(customerId, productId);
         return ResponseEntity.noContent().build();
-    }
+      }
 
     // 9. Удаления пользователя по имени
     @DeleteMapping("/deleteByName/{customerName}")
@@ -101,13 +101,13 @@ public class CustomerController {
 
         // Возвращаем успешный ответ
         return ResponseEntity.ok().build();
-    }
+       }
 
     // 10. Получить общее количество покупателей из БД
     @GetMapping("/getAll")
     Iterable<Customer> getAllCustomers() {
         return commonCustomerService.getAll();
-    }
+       }
 
     // 11. добавления товара в корзину пользователя
     @PostMapping("/addToCart/{userId}/{productId}")
@@ -122,7 +122,6 @@ public class CustomerController {
         // Возвращаем успешный ответ
         return ResponseEntity.ok().build();
     }
-
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
