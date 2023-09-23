@@ -126,17 +126,14 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public Map<String, String> handleConstraintViolationException(
-            ConstraintViolationException ex
-    ){
+            ConstraintViolationException ex){
         Map<String, String> errors = new HashMap<>();
         ex.getConstraintViolations().forEach(
                 violation -> {
                     errors.put(
-                            violation.getPropertyPath().toString(),
-                            violation.getMessage()
-                    );
-                }
-        );
-        return errors;
-    }
-}
+                           violation.getPropertyPath().toString(),
+                           violation.getMessage());
+                       });
+                         return errors;
+                           }
+                       }
