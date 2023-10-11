@@ -23,7 +23,7 @@ public class CommonProductRepository implements ProductRepository {
     }
 
     @Override
-    public Product getProductById(int id) {
+    public Product getById(int id) {
         try {
             return (Product) dataBase.select("Select product where id = " + id).get(0);
         } catch (SQLException e) {
@@ -32,7 +32,7 @@ public class CommonProductRepository implements ProductRepository {
     }
 
     @Override
-    public void addProduct(String name, double price) {
+    public void add(String name, double price) {
         try {
             dataBase.execute("Add new product name = " + name + " price = " + price);
         } catch (SQLException e) {
@@ -41,7 +41,7 @@ public class CommonProductRepository implements ProductRepository {
     }
 
     @Override
-    public void deleteProductById(int id) {
+    public void delete(int id) {
         try {
             dataBase.execute("Delete product where id = " + id);
         } catch (SQLException e) {

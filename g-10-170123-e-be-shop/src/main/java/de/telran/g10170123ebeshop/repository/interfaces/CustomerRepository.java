@@ -8,17 +8,15 @@ public interface CustomerRepository {
 
     List<Customer> getAll();
 
-    Customer getCustomerById(int id);
+    Customer getById(int id);
 
-    void addCustomer(String name);
+    void add(String name);
 
-    void deleteCustomerById(int id);
+    void delete(int id);
 
     void addToCartById(int customerId, int productId);
 
-    void deleteAllProductsFromCart(int customerId);
+    void deleteFromCart(int customerId, int productId);
 
-    void deleteProductById(int customerId, int productId);
-
-
+    void clearCart(int customerId);
 }

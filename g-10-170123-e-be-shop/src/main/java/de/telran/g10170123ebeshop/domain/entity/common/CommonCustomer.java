@@ -2,6 +2,7 @@ package de.telran.g10170123ebeshop.domain.entity.common;
 
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Cart;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
+import de.telran.g10170123ebeshop.domain.entity.jpa.JpaCart;
 
 public class CommonCustomer implements Customer {
 
@@ -28,5 +29,10 @@ public class CommonCustomer implements Customer {
     @Override
     public Cart getShoppingCart() {
         return shoppingCart;
+    }
+
+    @Override
+    public JpaCart getCart() {
+        return null;
     }
 }

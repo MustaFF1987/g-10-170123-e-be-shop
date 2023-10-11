@@ -2,16 +2,15 @@ package de.telran.g10170123ebeshop.service.common;
 
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Cart;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
+import de.telran.g10170123ebeshop.domain.entity.jpa.JpaCustomer;
 import de.telran.g10170123ebeshop.repository.interfaces.CustomerRepository;
 import de.telran.g10170123ebeshop.service.interfaces.CustomerService;
 import de.telran.g10170123ebeshop.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-    @Service
-    public class CommonCustomerService implements CustomerService {
+public class CommonCustomerService implements CustomerService {
 
     @Autowired
     private CustomerRepository repository;
@@ -25,24 +24,24 @@ import java.util.List;
     }
 
     @Override
-    public Customer getById(int id) {
-        return repository.getCustomerById(id);
+    public JpaCustomer getById(int id) {
+        return (JpaCustomer) repository.getById(id);
     }
 
     @Override
     public void add(Customer customer) {
-        repository.addCustomer(customer.getName());
+        repository.add(customer.getName());
     }
 
     @Override
     public void deleteById(int id) {
-        repository.deleteCustomerById(id);
+        repository.delete(id);
     }
 
     @Override
     public void deleteByName(String name) {
         int idToDelete = repository.getAll().stream().filter(x -> x.getName().equals(name)).findFirst().get().getId();
-        repository.getCustomerById(idToDelete);
+        repository.delete(idToDelete);
     }
 
     @Override
@@ -52,12 +51,12 @@ import java.util.List;
 
     @Override
     public double getTotalPriceById(int id) {
-        return repository.getCustomerById(id).getShoppingCart().getTotalPrice();
+        return repository.getById(id).getCart().getTotalPrice();
     }
 
     @Override
     public double getAveragePriceById(int id) {
-        Cart cart = repository.getCustomerById(id).getShoppingCart();
+        Cart cart = repository.getById(id).getCart();
         return cart.getTotalPrice() / cart.getProducts().size();
     }
 
@@ -66,13 +65,13 @@ import java.util.List;
         repository.addToCartById(customerId, productId);
     }
 
-        @Override
-        public void deleteFromCart(int customerId, int productId) {
-            repository.deleteProductById(customerId, productId);
-        }
+    @Override
+    public void deleteFromCart(int customerId, int productId) {
+        repository.deleteFromCart(customerId, productId);
+    }
 
     @Override
     public void clearCart(int customerId) {
-        repository.deleteAllProductsFromCart(customerId);
+        repository.clearCart(customerId);
     }
 }

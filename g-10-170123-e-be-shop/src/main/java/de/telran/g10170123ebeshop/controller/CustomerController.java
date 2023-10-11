@@ -1,137 +1,149 @@
 package de.telran.g10170123ebeshop.controller;
 
-
 import de.telran.g10170123ebeshop.domain.entity.common.CommonCustomer;
-import de.telran.g10170123ebeshop.domain.entity.interfaces.Cart;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
-import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
-import de.telran.g10170123ebeshop.repository.common.CommonCustomerRepository;
-import de.telran.g10170123ebeshop.repository.interfaces.CustomerRepository;
-import de.telran.g10170123ebeshop.service.common.CommonCustomerService;
+import de.telran.g10170123ebeshop.exeption.exeptions.CustomerIdDoesNotExistException;
 import de.telran.g10170123ebeshop.service.interfaces.CustomerService;
-import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-;
 
-
+/**
+ * Контроллер покупателей.
+ * Принимает входящие http-запросы
+ * для получения, добавления и удаления покупателей.
+ */
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/customer")
 public class CustomerController {
 
+    /**
+     * Сервис покупателей.
+     * Содержит бизнес-логику, относящуюся к покупателям.
+     */
     @Autowired
-    private CommonCustomerService commonCustomerService;
+    private CustomerService service;
 
+    /**
+     * Получение всех покупателей.
+     *
+     * @return список всех покупателей, хранящихся в БД.
+     */
+    @GetMapping
+    public List<Customer> getAll() {
 
-    // 1. Получить общее количество покупателей
-    @GetMapping("/getCount")
-    public ResponseEntity<Long> getAllCustomersCount() {
-        long totalCustomers = commonCustomerService.getCount();
-        return ResponseEntity.ok(totalCustomers);
-      }
-
-    // 2. Добавления пользователя
-    @PostMapping ("/addUser")
-    @ResponseStatus(HttpStatus.CREATED)
-    public CommonCustomer addCustomer(@RequestBody CommonCustomer commonCustomer) {
-        commonCustomerService.add(commonCustomer);
-        return commonCustomer;
-      }
-
-    // 3. Получения пользователя по id
-    @GetMapping("/getUserById/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable int id) {
-        Customer customer = commonCustomerService.getById(id);
-        if (customer != null) {
-            return ResponseEntity.ok(customer); // Возвращаем найденного покупателя
-        } else {
-            return ResponseEntity.notFound().build(); // Возвращаем статус 404, если покупатель не найден
-        }
-      }
-
-    // 4. Удаление пользователя по id
-       @DeleteMapping("/deleteById/{id}")
-       void delete(@PathVariable int id)
-      {
-          commonCustomerService.deleteById(id);
-      }
-
-    //  5. Получить стоимость корзины покупателя по его идентификатору.
-        @GetMapping("/{customerId}/cart/total")
-        public ResponseEntity<Double> getCartTotalByCustomerId(@PathVariable int customerId) {
-        double cartTotal = commonCustomerService.getTotalPriceById(customerId);
-        return ResponseEntity.ok(cartTotal);
-      }
-
-    //  6. Получить среднюю стоимость товара в корзине покупателя по его идентификатору
-    @GetMapping("/{customerId}/cart/average")
-    public ResponseEntity<Double> getAverageCartItemPrice(@PathVariable int customerId) {
-        double averageCartItemPrice =  commonCustomerService.getAveragePriceById(customerId);
-        return ResponseEntity.ok(averageCartItemPrice);
-      }
-
-    // 7. Очистить корзину покупателя по его идентификатору
-    @DeleteMapping("/{customerId}/cart/clear")
-    public ResponseEntity<Void> clearCart(@PathVariable Long customerId) {
-        commonCustomerService.clearCart(customerId.intValue());
-        return ResponseEntity.noContent().build();
-      }
-
-    // 8. Удалить товар из корзины покупателя по идентификатору
-    @DeleteMapping("/{customerId}/cart/deleteProduct/{productId}")
-    public ResponseEntity<Void> deleteProductFromCartByCustomerId(
-            @PathVariable int customerId,
-            @PathVariable int productId) {
-        commonCustomerService.deleteFromCart(customerId, productId);
-        return ResponseEntity.noContent().build();
-      }
-
-    // 9. Удаления пользователя по имени
-    @DeleteMapping("/deleteByName/{customerName}")
-    public ResponseEntity<Void> deleteCustomerByName(@PathVariable String customerName) {
-        commonCustomerService.deleteByName(customerName);
-        // Возвращаем успешный ответ
-        return ResponseEntity.ok().build();
-       }
-
-    // 10. Получить общее количество покупателей из БД
-    @GetMapping("/getAll")
-    Iterable<Customer> getAllCustomers() {
-        return commonCustomerService.getAll();
-       }
-
-    // 11. добавления товара в корзину пользователя
-    @PostMapping("/addToCart/{userId}/{productId}")
-    public ResponseEntity<Void> addToCart(
-            @PathVariable int userId,
-            @PathVariable int productId) {
-
-        // Вызываем сервис commonCustomerService м метод addToCartById с аргументами
-        // для добавления товара в корзину пользователя
-        commonCustomerService.addToCartById(userId, productId);
-
-        // Возвращаем успешный ответ
-        return ResponseEntity.ok().build();
+        return service.getAll();
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ConstraintViolationException.class)
-    public Map<String, String> handleConstraintViolationException(
-            ConstraintViolationException ex){
-        Map<String, String> errors = new HashMap<>();
-        ex.getConstraintViolations().forEach(
-                violation -> {
-                    errors.put(
-                           violation.getPropertyPath().toString(),
-                           violation.getMessage());
-                       });
-                         return errors;
-                           }
-                       }
+    /**
+     * Получение покупателя по идентификатору.
+     *
+     * @param id    идентификатор покупателя.
+     * @return      покупатель, имеющий переданный идентификатор.
+     */
+    @GetMapping("/{id}")
+    public Customer getById(@PathVariable int id) {
+        Customer customer = service.getById(id);
+        if (customer == null) {
+            throw new CustomerIdDoesNotExistException("Customer doesn`t exist!");
+        }
+        return customer;
+    }
+
+    /**
+     * Добавление покупателя.
+     *
+     * @param customer  объект покупателя, содержащийся в теле POST-запроса.
+     * @return          объект сохраняемого покупателя в случае успешного сохранения.
+     */
+    @PostMapping
+    public Customer add(@RequestBody CommonCustomer customer) {
+        service.add(customer);
+        return customer;
+    }
+
+    /**
+     * Удаление покупателя.
+     *
+     * @param id идентификатор удаляемого из БД покупателя.
+     */
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {
+        service.deleteById(id);
+    }
+
+    /**
+     * Удаление покупателя.
+     *
+     * @param name имя удаляемого из БД покупателя.
+     */
+    @DeleteMapping("/name/{name}")
+    public void delete(@PathVariable String name) {
+        service.deleteByName(name);
+    }
+
+    /**
+     * Получение количества покупателей.
+     *
+     * @return количество покупателей, содержащихся в БД.
+     */
+    @GetMapping("/count")
+    public int getCount() {
+        return service.getCount();
+    }
+
+    /**
+     * Получение стоимости продуктов конкретного покупателя.
+     *
+     * @param id    идентификатор покупателя.
+     * @return      стоимость всех продуктов в корзине покупателя с переданным идентификатором.
+     */
+    @GetMapping("/total/{id}")
+    public double getTotalPrice(@PathVariable int id) {
+        return service.getTotalPriceById(id);
+    }
+
+    /**
+     * Получение средней стоимости продукта конкретного покупателя.
+     *
+     * @param id    идентификатор покупателя.
+     * @return      средняя стоимость продукта в корзине покупателя с переданным идентификатором.
+     */
+    @GetMapping("/average/{id}")
+    public double getAverage(@PathVariable int id) {
+        return service.getAveragePriceById(id);
+    }
+
+    /**
+     * Добавление продукта в корзину.
+     *
+     * @param customerId    идентификатор покупателя, которому добавляется продукт.
+     * @param productId     идентификатор добавляемого продукта.
+     */
+    @GetMapping("/{customerId}/{productId}")
+    public void addToCart(@PathVariable int customerId, @PathVariable int productId) {
+        service.addToCartById(customerId, productId);
+    }
+
+    /**
+     * Удаление продукта из корзины.
+     *
+     * @param customerId    идентификатор покупателя, из корзины которого удаляется продукт.
+     * @param productId     идентификатор удаляемого продукта.
+     */
+    @DeleteMapping("/{customerId}/{productId}")
+    public void deleteFromCart(@PathVariable int customerId, @PathVariable int productId) {
+        service.deleteFromCart(customerId, productId);
+    }
+
+    /**
+     * Очистка корзины.
+     *
+     * @param customerId идентификатор покупателя, у которого очищается корзина.
+     */
+    @DeleteMapping("/clear/{customerId}")
+    public void clearCart(@PathVariable int customerId) {
+        service.clearCart(customerId);
+    }
+}

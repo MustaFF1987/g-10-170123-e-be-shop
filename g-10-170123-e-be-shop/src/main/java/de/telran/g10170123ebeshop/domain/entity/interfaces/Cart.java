@@ -17,4 +17,6 @@ public interface Cart {
     void deleteAll();
 
     double calculateTotal();
+
+    void clear();
 }

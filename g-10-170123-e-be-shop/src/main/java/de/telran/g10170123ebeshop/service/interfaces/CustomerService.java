@@ -1,6 +1,7 @@
 package de.telran.g10170123ebeshop.service.interfaces;
 
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
+import de.telran.g10170123ebeshop.domain.entity.jpa.JpaCustomer;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
         List<Customer> getAll();
 
-        Customer getById(int id);
+        JpaCustomer getById(int id);
 
         void add(Customer customer);
 

@@ -8,10 +8,9 @@ public interface ProductRepository {
 
     List<Product> getAll();
 
-    Product getProductById(int id);
+    Product getById(int id);
 
-    void addProduct(String name, double price);
+    void add(String name, double price);
 
-    void deleteProductById(int id);
-
+    void delete(int id);
 }

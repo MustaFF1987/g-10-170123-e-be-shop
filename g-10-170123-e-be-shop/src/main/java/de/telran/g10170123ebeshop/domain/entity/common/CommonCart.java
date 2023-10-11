@@ -60,4 +60,9 @@ public class CommonCart implements Cart {
 
         return total;
     }
+
+    @Override
+    public void clear() {
+
+    }
 }

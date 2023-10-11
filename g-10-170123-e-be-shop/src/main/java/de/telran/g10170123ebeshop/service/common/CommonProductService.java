@@ -21,17 +21,17 @@ import java.util.List;
 
     @Override
     public Product getById(int id) {
-        return productRepository.getProductById(id);
+        return productRepository.getById(id);
     }
 
     @Override
     public void addProduct(Product product) {
-        productRepository.addProduct(product.getName(), product.getPrice());
+        productRepository.add((product.getName()), product.getPrice());
     }
 
     @Override
     public void deleteById(int id) {
-        productRepository.deleteProductById(id);
+        productRepository.delete(id);
     }
 
     @Override
