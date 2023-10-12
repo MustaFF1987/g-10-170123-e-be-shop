@@ -24,37 +24,37 @@ public class JpaProductService implements ProductService {
     @Override
     public List<Product> getAll() {
         return new ArrayList<>(repository.findAll());
-
     }
 
     @Override
     public Product getById(int id) {
+//        LOGGER.log(Level.INFO, String.format("Вызван метод getById с параметром %d.", id));
+//        LOGGER.log(Level.WARN, String.format("Вызван метод getById с параметром %d.", id));
+//        LOGGER.log(Level.ERROR, String.format("Вызван метод getById с параметром %d.", id));
 
-        LOGGER.log(Level.INFO, String.format("Вызван метод getById с параметром %d.", id));
-        LOGGER.log(Level.WARN, String.format("Вызван метод getById с параметром %d.", id));
-        LOGGER.log(Level.ERROR, String.format("Вызван метод getById с параметром %d.", id));
-
-//        LOGGER.info(String.format("Вызван метод getById с параметром %d.", id));
-//        LOGGER.warn(String.format("Вызван метод getById с параметром %d.", id));
-//        LOGGER.error(String.format("Вызван метод getById с параметром %d.", id));
+        LOGGER.info(String.format("Вызван метод getById с параметром %d.", id));
+        LOGGER.warn(String.format("Вызван метод getById с параметром %d.", id));
+        LOGGER.error(String.format("Вызван метод getById с параметром %d.", id));
 
         return repository.findById(id).orElse(null);
     }
 
     @Override
     public void addProduct(Product product) {
-        repository.save(new JpaProduct(0, product.getName(), product.getPrice()));
+        product = repository.save(new JpaProduct(0, product.getName(), product.getPrice()));
     }
 
     @Override
     public void deleteById(int id) {
+        if (id < 1) {
+            throw new IllegalArgumentException("ID не может быть меньше 1");
+        }
         repository.deleteById(id);
     }
 
     @Override
     public int getCount() {
-        return (int)
-                repository.count();
+        return (int) repository.count();
     }
 
     @Override
