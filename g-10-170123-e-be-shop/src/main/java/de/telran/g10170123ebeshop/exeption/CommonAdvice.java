@@ -1,6 +1,8 @@
 package de.telran.g10170123ebeshop.exeption;
 
 import de.telran.g10170123ebeshop.exeption.exeptions.CustomerIdDoesNotExistException;
+import de.telran.g10170123ebeshop.exeption.exeptions.CustomerNotFoundException;
+import de.telran.g10170123ebeshop.exeption.exeptions.CustomerValidationException;
 import de.telran.g10170123ebeshop.exeption.exeptions.EntityValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,4 +23,17 @@ public class CommonAdvice {
         Response response = new Response(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.I_AM_A_TEAPOT);
     }
+
+    @ExceptionHandler(CustomerValidationException.class)
+    public ResponseEntity<String> handleCustomerValidationException(CustomerValidationException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException e) {
+        return ResponseEntity.notFound().build();
+    }
+
+
+
 }
