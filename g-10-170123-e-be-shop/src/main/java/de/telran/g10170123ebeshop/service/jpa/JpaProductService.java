@@ -28,13 +28,14 @@ public class JpaProductService implements ProductService {
 
     @Override
     public Product getById(int id) {
+
 //        LOGGER.log(Level.INFO, String.format("Вызван метод getById с параметром %d.", id));
 //        LOGGER.log(Level.WARN, String.format("Вызван метод getById с параметром %d.", id));
 //        LOGGER.log(Level.ERROR, String.format("Вызван метод getById с параметром %d.", id));
 
-        LOGGER.info(String.format("Вызван метод getById с параметром %d.", id));
-        LOGGER.warn(String.format("Вызван метод getById с параметром %d.", id));
-        LOGGER.error(String.format("Вызван метод getById с параметром %d.", id));
+//        LOGGER.info(String.format("Вызван метод getById с параметром %d.", id));
+//        LOGGER.warn(String.format("Вызван метод getById с параметром %d.", id));
+//        LOGGER.error(String.format("Вызван метод getById с параметром %d.", id));
 
         return repository.findById(id).orElse(null);
     }

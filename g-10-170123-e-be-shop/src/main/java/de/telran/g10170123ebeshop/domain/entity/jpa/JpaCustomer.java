@@ -63,4 +63,13 @@ public class JpaCustomer implements Customer {
     public void setCart(JpaCart cart) {
         this.cart = cart;
     }
+
+    @Override
+    public String toString() {
+        return "JpaCustomer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", cart=" + cart +
+                '}';
+    }
 }

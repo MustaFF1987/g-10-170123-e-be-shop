@@ -120,5 +120,35 @@ public class AspectLogging {
         System.out.println("Метод" + methodName + " класса " + className + " выкинул исключение: " + ex.getMessage());
     }
 
+
+    @Before("execution(* de.telran.g10170123ebeshop.service.jpa.JpaCustomerService.*(..))")
+    public void logMethodEntry2(JoinPoint joinPoint) {
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
+        Object[] methodArgs = joinPoint.getArgs();
+        System.out.println("Метод " + methodName + " класса " + className + " вызван с аргументами: " + Arrays.toString(methodArgs));
+    }
+
+    @After("execution(* de.telran.g10170123ebeshop.service.jpa.JpaCustomerService.*(..))")
+    public void logMethodExit2(JoinPoint joinPoint) {
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Метод " + methodName + " класса " + className + " успешно выполнен.");
+    }
+
+    @AfterReturning(pointcut = "execution(* de.telran.g10170123ebeshop.service.jpa.JpaCustomerService.*(..))", returning = "result")
+    public void logMethodSuccess2(JoinPoint joinPoint, Object result) {
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Метод" + methodName + " класса " + className + " успешно вернул результат: " + result);
+    }
+
+    @AfterThrowing(pointcut = "execution(* de.telran.g10170123ebeshop.service.jpa.JpaCustomerService.*(..))", throwing = "ex")
+    public void logMethodError2(JoinPoint joinPoint, Exception ex) {
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Метод" + methodName + " класса " + className + " выкинул исключение: " + ex.getMessage());
+    }
+
 }
 
