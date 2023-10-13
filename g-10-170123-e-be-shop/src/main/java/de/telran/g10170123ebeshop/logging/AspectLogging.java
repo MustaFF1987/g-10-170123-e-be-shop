@@ -64,19 +64,61 @@ public class AspectLogging {
         }
     }
 
+    // =====================================================================================
+
+    //При помощи АОП сделать логирование всех методов сервиса продуктов.
+    //Для задания Pointcut использовать JpaProductService.*(..). В лог должно выводиться:
+    //А. Какой метод и с какими параметрами вызван.
+    //Б. Какой метод завершил работу.
+
+//    @Before("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.*(..))")
+//    public void logMethodEntry(JoinPoint joinPoint) {
+//        Object[] methodArgs = joinPoint.getArgs();
+//        System.out.println("Вызван метод их пакета JpaProductService " + methodArgs + " с аргументами: " + Arrays.toString(methodArgs));
+//    }
+//
+//    @After("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.*(..))")
+//    public void logMethodExit(JoinPoint joinPoint) {
+//        Object[] methodArgs = joinPoint.getArgs();
+//        System.out.println("Метод их пакета JpaProductService " + methodArgs + " отработал успешно.");
+//    }
+
+    // =======================================================================================
+
+    //При помощи АОП сделать логирование всех сервисов (то есть создать Pointcut сразу на пакет). В лог должно выводиться:
+    //А. Какой метод какого класса и с какими параметрами вызван.
+    //Б. Какой метод какого класса завершил работу.
+    //В. Какой метод какого класса успешно вернул результат.
+    //Г. Какой метод какого класса вызвал ошибку.
 
     @Before("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.*(..))")
     public void logMethodEntry(JoinPoint joinPoint) {
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
         Object[] methodArgs = joinPoint.getArgs();
-        System.out.println("Вызван метод их пакета JpaProductService " + methodArgs + " с аргументами: " + Arrays.toString(methodArgs));
+        System.out.println("Метод " + methodName + " класса " + className + " вызван с аргументами: " + Arrays.toString(methodArgs));
     }
 
     @After("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.*(..))")
     public void logMethodExit(JoinPoint joinPoint) {
-        Object[] methodArgs = joinPoint.getArgs();
-        System.out.println("Метод их пакета JpaProductService " + methodArgs + " отработал успешно.");
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Метод " + methodName + " класса " + className + " успешно выполнен.");
     }
 
+    @AfterReturning(pointcut = "execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.*(..))", returning = "result")
+    public void logMethodSuccess(JoinPoint joinPoint, Object result) {
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Метод" + methodName + " класса " + className + " успешно вернул результат: " + result);
+    }
+
+    @AfterThrowing(pointcut = "execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.*(..))", throwing = "ex")
+    public void logMethodError(JoinPoint joinPoint, Exception ex) {
+        String className = joinPoint.getSignature().getDeclaringTypeName();
+        String methodName = joinPoint.getSignature().getName();
+        System.out.println("Метод" + methodName + " класса " + className + " выкинул исключение: " + ex.getMessage());
+    }
 
 }
 
