@@ -25,13 +25,15 @@ public class CommonAdvice {
     }
 
     @ExceptionHandler(CustomerValidationException.class)
-    public ResponseEntity<String> handleCustomerValidationException(CustomerValidationException e) {
-        return ResponseEntity.badRequest().body(e.getMessage());
+    public ResponseEntity<Response> handleException(CustomerValidationException e) {
+        Response response = new Response(e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(CustomerNotFoundException.class)
-    public ResponseEntity<String> handleCustomerNotFoundException(CustomerNotFoundException e) {
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Response> handleException(CustomerNotFoundException e) {
+        Response response = new Response(e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NO_CONTENT);
     }
 
 
