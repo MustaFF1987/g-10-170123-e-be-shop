@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Aspect
 @Component
 public class AspectLogging {
@@ -61,5 +63,20 @@ public class AspectLogging {
             throw new RuntimeException(e);
         }
     }
+
+
+    @Before("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.*(..))")
+    public void logMethodEntry(JoinPoint joinPoint) {
+        Object[] methodArgs = joinPoint.getArgs();
+        System.out.println("Вызван метод их пакета JpaProductService " + methodArgs + " с аргументами: " + Arrays.toString(methodArgs));
+    }
+
+    @After("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.*(..))")
+    public void logMethodExit(JoinPoint joinPoint) {
+        Object[] methodArgs = joinPoint.getArgs();
+        System.out.println("Метод их пакета JpaProductService " + methodArgs + " отработал успешно.");
+    }
+
+
 }
 
