@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Cart;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Customer;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "customer")
@@ -15,6 +17,7 @@ public class JpaCustomer implements Customer {
     private int id;
 
     @Column(name = "name")
+    @NotBlank(message = "Name is required")
     private String name;
 
     @JsonIgnore
