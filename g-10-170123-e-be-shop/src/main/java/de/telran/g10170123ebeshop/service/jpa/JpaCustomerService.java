@@ -78,8 +78,6 @@ public class JpaCustomerService implements CustomerService {
         return cart.getTotalPrice() / cart.getProducts().size();
     }
 
-
-
     @Transactional
     @Override
     public void addToCartById(int customerId, int productId) {
