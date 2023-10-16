@@ -1,11 +1,15 @@
 package de.telran.g10170123ebeshop.scheduler;
 
+import de.telran.g10170123ebeshop.domain.entity.interfaces.Cart;
 import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 import de.telran.g10170123ebeshop.domain.entity.jpa.Task;
 import de.telran.g10170123ebeshop.repository.interfaces.ProductRepository;
 import de.telran.g10170123ebeshop.repository.jpa.TaskRepository;
 import de.telran.g10170123ebeshop.service.jpa.TaskService;
 import jakarta.transaction.Transactional;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -195,19 +199,57 @@ public class ScheduleExecutor {
     //Вывод в консоль должен быть осуществлён через логирование поля description созданной задачи.
     //Пример значения поля description - "Последний добавленный в БД продукт - Банан
 
-    @Scheduled(cron = "15,45 * * * * *")
-    public void displayLastAddedProduct() {
-        Product lastProduct = productRepository.getById(18);
-        if (lastProduct != null) {
-            String description = "Последний добавленный в БД продукт - " + lastProduct.getName();
-            service.save(new Task(description));
-            logger.info(description);
-        } else {
-            logger.info("Продуктов не найдено");
-        }
-    }
+//    @Scheduled(cron = "15,45 * * * * *")
+//    public void displayLastAddedProduct() {
+//        Product lastProduct = productRepository.getById(18);
+//        if (lastProduct != null) {
+//            String description = "Последний добавленный в БД продукт - " + lastProduct.getName();
+//            service.save(new Task(description));
+//            logger.info(description);
+//        } else {
+//            logger.info("Продуктов не найдено");
+//        }
+//    }
 
 //==============================================================================
 
+// После запроса конкретного продукта через 15 секунд отправить персональное предложение
+//на этот продукт с ценой на 5-10% (рандомно) ниже, чем базовая цена.
+//Имитировать отправку в виде вывода в консоль и логирования.
+//Данная задача должна выполняться при помощи АОП и сохраняться в БД.
+//Вывод в консоль должен быть осуществлён через логирование поля description созданной задачи.
+//Поле description задачи должно содержать предложение купить товар по новой цене
+//с указанием наименования товара, старой цены и новой цены.
+//Указание скидки для данного предложения не должно влиять на базовую цену товара в БД.
+
+
+
+    @Pointcut("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.getById..))")
+    @After("getById()")
+    public void sendOffer(int productId, Product product) {if (product != null) {
+            double discount = generateRandomDiscount(); // Генерируем случайную скидку
+            double newPrice = product.getPrice() * (1 - discount);
+
+            String description = "Предложение для " + product.getName() +
+                    ": Купите товар по специальной цене " + newPrice + " (старая цена: " + product.getPrice() + ").";
+            service.save(new Task(description));
+            logger.info(description);
+        }
+    }
+    private double generateRandomDiscount() {
+        return 0.05 + Math.random() * 0.05; // Генерируем случайную скидку от 5% до 10%
+    }
+
+//================================================================================================
+
+//После того как покупатель очистил корзину, через 20 секунд выбрать из корзины случайный товар,
+//который там был, сделать на него скидку 15% и предложить покупателю всё-таки
+//приобрести все эти товары, вывести все товары (один с новой ценой), а также старую и новую стоимость корзины.
+//Данная задача должна выполняться при помощи АОП и сохраняться в БД.
+//Вывод в консоль должен быть осуществлён через логирование поля description созданной задачи.
+//Поле description задачи должно содержать предложение приобрести все товары из корзины,
+//список товаров из корзины (каждый товар с новой строки), причём товар со скидкой должен быть указан с новой ценой,
+//а также с новой строки - старую стоимость корзины и новую стоимость корзины.
+//Указание скидки для данного предложения не должно влиять на базовую цену товара в БД.
 
 }
