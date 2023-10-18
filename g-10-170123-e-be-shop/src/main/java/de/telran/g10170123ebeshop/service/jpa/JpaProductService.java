@@ -80,4 +80,5 @@ public class JpaProductService implements ProductService {
     public void deleteByName(String name) {
         repository.deleteByName(name);
     }
+
 }

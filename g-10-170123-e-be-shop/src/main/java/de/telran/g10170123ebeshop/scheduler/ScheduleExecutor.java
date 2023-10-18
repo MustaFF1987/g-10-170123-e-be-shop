@@ -199,17 +199,20 @@ public class ScheduleExecutor {
     //Вывод в консоль должен быть осуществлён через логирование поля description созданной задачи.
     //Пример значения поля description - "Последний добавленный в БД продукт - Банан
 
-//    @Scheduled(cron = "15,45 * * * * *")
-//    public void displayLastAddedProduct() {
-//        Product lastProduct = productRepository.getById(18);
-//        if (lastProduct != null) {
-//            String description = "Последний добавленный в БД продукт - " + lastProduct.getName();
-//            service.save(new Task(description));
-//            logger.info(description);
-//        } else {
-//            logger.info("Продуктов не найдено");
-//        }
-//    }
+    @Scheduled(cron = "5,10,15,12,25,30,35,40,45,50,55 * * * * *")
+    public void displayLastAddedProduct() {
+        Product lastProduct = null;
+        lastProduct = (Product) productRepository.findTopByNameOrderByTimestampDesc(lastProduct.getName());
+        if (lastProduct != null) {
+            String productName = "Последний добавленный в БД продукт - " + lastProduct.getName();
+            service.save(new Task(productName));
+            logger.info(productName);
+        } else {
+            logger.info("Продуктов не найдено");
+        }
+    }
+
+}
 
 //==============================================================================
 
@@ -223,22 +226,27 @@ public class ScheduleExecutor {
 //Указание скидки для данного предложения не должно влиять на базовую цену товара в БД.
 
 
-
-    @Pointcut("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.getById..))")
-    @After("getById()")
-    public void sendOffer(int productId, Product product) {if (product != null) {
-            double discount = generateRandomDiscount(); // Генерируем случайную скидку
-            double newPrice = product.getPrice() * (1 - discount);
-
-            String description = "Предложение для " + product.getName() +
-                    ": Купите товар по специальной цене " + newPrice + " (старая цена: " + product.getPrice() + ").";
-            service.save(new Task(description));
-            logger.info(description);
-        }
-    }
-    private double generateRandomDiscount() {
-        return 0.05 + Math.random() * 0.05; // Генерируем случайную скидку от 5% до 10%
-    }
+//    @Pointcut("execution(* de.telran.g10170123ebeshop.service.jpa.JpaProductService.getById(..))")
+//    public void getById() {
+//    }
+//    @AfterReturning(value = "getById()", returning = "product")
+//    public void sendOffer(Product product) {
+//        if (product != null) {
+//            TaskScheduler scheduler = new DefaultManagedTaskScheduler();
+//            scheduler.schedule(() -> {
+//                double discount = generateRandomDiscount();
+//                double newPrice = product.getPrice() * (1 - discount);
+//                String description = "Предложение для " + product.getName() +
+//                        ": Купите товар по специальной цене " + newPrice + " (старая цена: " + product.getPrice() + ").";
+//                service.save(new Task(description));
+//                logger.info(description);
+//            }, Instant.now().plusSeconds(1));
+//        }
+//    }
+//    private double generateRandomDiscount() {
+//        return 0.05 + Math.random() * 0.05; // Генерируем случайную скидку от 5% до 10%
+//    }
+//}
 
 //================================================================================================
 
@@ -254,4 +262,3 @@ public class ScheduleExecutor {
 //а также с новой строки - старую стоимость корзины и новую стоимость корзины.
 //Указание скидки для данного предложения не должно влиять на базовую цену товара в БД.
 
-}

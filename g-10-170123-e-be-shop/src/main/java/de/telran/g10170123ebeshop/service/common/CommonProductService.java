@@ -4,7 +4,6 @@ import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 import de.telran.g10170123ebeshop.repository.interfaces.ProductRepository;
 import de.telran.g10170123ebeshop.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -60,4 +59,9 @@ import java.util.List;
                 deleteById(productToDelete.getId());
             }
         }
-}
+
+        List<Product> findTopByNameOrderByTimestampDesc(String name) {
+            return productRepository.findTopByNameOrderByTimestampDesc(name);
+        }
+
+    }

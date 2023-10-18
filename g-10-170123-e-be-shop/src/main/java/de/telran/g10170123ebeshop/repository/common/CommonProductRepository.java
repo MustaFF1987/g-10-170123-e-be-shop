@@ -48,4 +48,9 @@ public class CommonProductRepository implements ProductRepository {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Product> findTopByNameOrderByTimestampDesc(String name) {
+        return null;
+    }
 }

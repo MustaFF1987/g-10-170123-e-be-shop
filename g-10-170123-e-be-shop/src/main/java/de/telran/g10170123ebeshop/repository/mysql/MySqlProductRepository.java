@@ -71,4 +71,10 @@ public class MySqlProductRepository implements ProductRepository {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<Product> findTopByNameOrderByTimestampDesc(String name) {
+        return null;
+    }
+
 }

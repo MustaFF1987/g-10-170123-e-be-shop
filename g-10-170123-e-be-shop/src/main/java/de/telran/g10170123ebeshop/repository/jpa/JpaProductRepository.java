@@ -1,9 +1,12 @@
 package de.telran.g10170123ebeshop.repository.jpa;
 
+import de.telran.g10170123ebeshop.domain.entity.interfaces.Product;
 import de.telran.g10170123ebeshop.domain.entity.jpa.JpaProduct;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface JpaProductRepository extends JpaRepository<JpaProduct, Integer> {
 
@@ -15,4 +18,5 @@ public interface JpaProductRepository extends JpaRepository<JpaProduct, Integer>
 
     @Query(value = "select avg(price) from product;", nativeQuery = true)
     double getAveragePrice();
+
 }
